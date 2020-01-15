@@ -28,7 +28,7 @@ class DatabaseFactory(override val di: DI) : DIAware {
     private fun hikari(): HikariDataSource {
         val qovery: Qovery by instance()
 
-        val databaseConfiguration = qovery.getDatabaseConfiguration("nbv-postgresql") ?: getLocalDataSource()
+        val databaseConfiguration = qovery.getDatabaseConfiguration("my-postgresql-6132005") ?: getLocalDataSource()
 
         val host = databaseConfiguration.host
         val port = databaseConfiguration.port

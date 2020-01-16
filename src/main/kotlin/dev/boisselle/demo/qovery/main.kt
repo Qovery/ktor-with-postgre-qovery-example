@@ -17,7 +17,6 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
 import org.kodein.di.ktor.controller.controller
 import org.kodein.di.ktor.di
-import java.lang.Compiler.enable
 import java.text.SimpleDateFormat
 
 fun Application.startup() {

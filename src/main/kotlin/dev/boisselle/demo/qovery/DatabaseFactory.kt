@@ -14,6 +14,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.generic.instance
+import kotlin.streams.toList
+
+enum class DatabaseType(val value: String) {
+    POSTGRESQL("POSTGRESQL"),
+    MYSQL("MYSQL"),
+}
 
 class DatabaseFactory(override val di: DI) : DIAware {
     fun init() {
@@ -28,7 +34,8 @@ class DatabaseFactory(override val di: DI) : DIAware {
     private fun hikari(): HikariDataSource {
         val qovery: Qovery by instance()
 
-        val databaseConfiguration = qovery.getDatabaseConfiguration("my-postgresql-6132005") ?: getLocalDataSource()
+        val databaseConfiguration =
+            qovery.listDatabaseConfiguration()?.toList()?.find { it.type == DatabaseType.POSTGRESQL.value } ?: getLocalDataSource()
 
         val host = databaseConfiguration.host
         val port = databaseConfiguration.port
@@ -50,7 +57,7 @@ class DatabaseFactory(override val di: DI) : DIAware {
     }
 
     private fun getLocalDataSource(): DatabaseConfiguration {
-        return DatabaseConfiguration("POSTGRESQL", "postgres-qovery", "localhost",5432, "postgres", "docker","11.5")
+        return DatabaseConfiguration(DatabaseType.POSTGRESQL.value, "postgres-qovery", "localhost",5432, "postgres", "docker","11.5")
     }
 }
 
